@@ -9,6 +9,8 @@ public class AthleteMovement : MonoBehaviour
     public float abilityCooldown;
     public float abilityChance;
     public int abilityType;
+    public float size;
+    public GameObject opponent;
     float abilityTimer;
     Vector2 direc;
     Rigidbody2D rbody;
@@ -24,11 +26,14 @@ public class AthleteMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.FindChild("RedDot").localScale = (new Vector2(1f, 1f)) * (abilityTimer / abilityCooldown);
+        size = ((rbody.mass) / (rbody.mass + 0.5f)) + 0.4f;
+        transform.localScale = new Vector3(size,size,0f);
+       // transform.GetChild(0).localScale = (new Vector3(1f, 1f,0f)) * (abilityTimer / abilityCooldown);
+
         if (abilityTimer <= 0)
         {
             abilityTimer = 0;
-            if (abilityChance >= Random.value / Time.deltaTime)
+            if (abilityChance >= Random.value)
             {
                 UseAbility();
                 abilityTimer = abilityCooldown;
@@ -52,7 +57,7 @@ public class AthleteMovement : MonoBehaviour
         switch (abilityType)
         {
             case 0:
-                Debug.Log("Ability!");
+                rbody.mass += 0.3f;
                 break;
             default:
                 break;
