@@ -18,8 +18,9 @@ public class matchControl : MonoBehaviour {
                 GameObject champ = (GameObject)Instantiate(Resources.Load("Athlete"));
                 champ.transform.position = new Vector3(2.2f, 2.5f, 0);
                 champ.GetComponent<AthleteMovement>().baseSpeed = (Random.value * 10) + 5;
-                champ.GetComponent<AthleteMovement>().abilityType = 0;
+                champ.GetComponent<AthleteMovement>().abilityType = (int) Mathf.Floor(Random.value*2f);
                 champ.GetComponent<AthleteMovement>().baseMass = Random.value * 2.5f;
+                champ.GetComponent<AthleteMovement>().abilityPower = Random.value;
                 champ.GetComponent<Rigidbody2D>().mass = champ.GetComponent<AthleteMovement>().baseMass;
                 champ.GetComponent<AthleteMovement>().abilityCooldown = Random.value * 5;
                 champ.GetComponent<AthleteMovement>().goal = GameObject.Find("Goal");

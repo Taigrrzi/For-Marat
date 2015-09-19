@@ -12,6 +12,7 @@ public class AthleteMovement : MonoBehaviour
     public float size;
     public GameObject opponent;
     public float baseHealth;
+    public float abilityPower;
     public float currentHealth;
     public float baseMass;
     float abilityTimer;
@@ -25,6 +26,13 @@ public class AthleteMovement : MonoBehaviour
     void Start()
     {
         rbody = GetComponent<Rigidbody2D>();
+        GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value, 1.0f);
+        transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color((1-GetComponent<SpriteRenderer>().color.r) + ((Random.value * 0.1f) - 0.2f), (1-GetComponent<SpriteRenderer>().color.g) + ((Random.value * 0.1f) - 0.2f), (1-GetComponent<SpriteRenderer>().color.b)+((Random.value*0.1f)-0.2f), 1.0f);
+       
+        /*    Finding Complementory Colours: 
+        if colour = { "RR", "GG", "BB"}
+        then colour.complement = { FF - "RR", FF - "GG", FF - "BB"}
+        */
 
         currentSpeed = baseSpeed;
         currentHealth = baseHealth;
@@ -53,7 +61,10 @@ public class AthleteMovement : MonoBehaviour
     {
         if (rbody.mass > baseMass)
         {
-            rbody.mass = baseMass + baseMass * (abilityTimer / abilityCooldown);
+            rbody.mass = baseMass + ((rbody.mass - baseMass) * (abilityTimer / abilityCooldown));
+        } else if (currentSpeed > baseSpeed)
+        {
+            currentSpeed = baseSpeed + ((currentSpeed-baseSpeed) * (abilityTimer / abilityCooldown));
         }
 
 
@@ -76,7 +87,10 @@ public class AthleteMovement : MonoBehaviour
         switch (abilityType)
         {
             case 0:
-                rbody.mass *= 2;
+                rbody.mass *= (abilityPower * 1.5f) + 1f;
+                break;
+            case 1:
+                currentSpeed *= (abilityPower * 1.5f) + 1f;
                 break;
             default:
                 break;
