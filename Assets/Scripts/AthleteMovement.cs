@@ -46,11 +46,6 @@ public class AthleteMovement : MonoBehaviour
         {
             abilityTimer -= Time.deltaTime;
         }
-
-        if (currentHealth <= 0)
-        {
-            Destroy(gameObject);
-        }
     }
 
     void FixedUpdate()

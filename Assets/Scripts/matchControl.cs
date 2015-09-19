@@ -10,7 +10,7 @@ public class matchControl : MonoBehaviour {
         StartMatch(matchType);
 	}
 
-    void StartMatch(int type)
+    public void StartMatch(int type)
     {
         switch (type)
         {
