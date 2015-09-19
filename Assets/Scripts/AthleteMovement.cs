@@ -13,9 +13,14 @@ public class AthleteMovement : MonoBehaviour
     public GameObject opponent;
     public float baseHealth;
     public float currentHealth;
+    public float baseMass;
     float abilityTimer;
     Vector2 direc;
     Rigidbody2D rbody;
+
+    Vector2 oppodirec;
+    Vector2 goaldirec;
+
     // Use this for initialization
     void Start()
     {
@@ -35,14 +40,10 @@ public class AthleteMovement : MonoBehaviour
 
         if (abilityTimer <= 0)
         {
-            abilityTimer = 0;
-            if (abilityChance >= Random.value)
-            {
-                UseAbility();
-                abilityTimer = abilityCooldown;
-            }
-        }
-        else
+            UseAbility();
+            abilityTimer = abilityCooldown;
+        
+        } else
         {
             abilityTimer -= Time.deltaTime;
         }
@@ -50,7 +51,22 @@ public class AthleteMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        direc = (Vector2)(goal.transform.position - transform.position);
+        if (rbody.mass > baseMass)
+        {
+            rbody.mass = baseMass + baseMass * (abilityTimer / abilityCooldown);
+        }
+
+
+        oppodirec = (Vector2) (opponent.transform.position - transform.position);
+        goaldirec = (Vector2) (goal.transform.position - transform.position);
+
+        if (goaldirec.magnitude > ((Vector2)(goal.transform.position - opponent.transform.position)).magnitude)
+        {
+            direc = goaldirec;
+        } else
+        {
+            direc = oppodirec;
+        }
         direc.Normalize();
         rbody.AddForce(rbody.mass * direc * currentSpeed);
     }
@@ -60,7 +76,7 @@ public class AthleteMovement : MonoBehaviour
         switch (abilityType)
         {
             case 0:
-                rbody.mass += 0.1f;
+                rbody.mass *= 2;
                 break;
             default:
                 break;
