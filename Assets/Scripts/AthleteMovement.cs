@@ -13,6 +13,7 @@ public class AthleteMovement : MonoBehaviour
     public GameObject opponent;
     public float baseHealth;
     public float currentHealth;
+    public float baseMass;
     float abilityTimer;
     Vector2 direc;
     Rigidbody2D rbody;
