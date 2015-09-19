@@ -5,7 +5,7 @@ public class RingCheck : MonoBehaviour {
 
     public float ringDamage;
 
-    void onTriggerExit(Collider other)
+    void OnTriggerExit2D(Collider2D other)
     {
         other.gameObject.GetComponent<AthleteMovement>().currentHealth -= ringDamage;
     }
