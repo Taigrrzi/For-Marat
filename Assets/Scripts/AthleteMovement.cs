@@ -51,6 +51,11 @@ public class AthleteMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (rbody.mass > baseMass)
+        {
+            rbody.mass = baseMass + baseMass * (abilityTimer / abilityCooldown);
+        }
+
 
         oppodirec = (Vector2) (opponent.transform.position - transform.position);
         goaldirec = (Vector2) (goal.transform.position - transform.position);
@@ -71,7 +76,7 @@ public class AthleteMovement : MonoBehaviour
         switch (abilityType)
         {
             case 0:
-                rbody.mass += 0.1f;
+                rbody.mass *= 2;
                 break;
             default:
                 break;
