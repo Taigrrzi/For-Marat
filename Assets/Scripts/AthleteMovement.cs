@@ -36,7 +36,7 @@ public class AthleteMovement : MonoBehaviour
 
         currentSpeed = baseSpeed;
         currentHealth = baseHealth;
-        abilityTimer = 0;
+        abilityTimer = abilityCooldown;
     }
 
     // Update is called once per frame
@@ -91,6 +91,9 @@ public class AthleteMovement : MonoBehaviour
                 break;
             case 1:
                 currentSpeed *= (abilityPower * 1.5f) + 1f;
+                break;
+            case 2:
+                rbody.AddForce(rbody.mass * direc * currentSpeed * abilityPower * 100);
                 break;
             default:
                 break;
