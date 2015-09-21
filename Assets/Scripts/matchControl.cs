@@ -6,14 +6,32 @@ public class matchControl : MonoBehaviour {
     public int matchType ;
     public string[] athleteIDs;
     public int athleteAmount ;
-	// Use this for initialization
-	void Start () {
+    public int matchTimer;
+    public int matchDuration;
+    public GameObject athlete1;
+    public GameObject athlete2;
+    // Use this for initialization
+    void Start () {
+        matchTimer = 0;
         athleteIDs = new string[athleteAmount];
         for (int i=0;i<athleteAmount;i++)
         {
             athleteIDs[i] = GeneratePlayerID();
         }
         StartMatch(matchType);
+    }
+
+    void Update ()
+    {
+        matchTimer++;
+        if (matchTimer > matchDuration*120)
+        {
+            Debug.Log("Draw!");
+            Destroy(athlete1);
+            Destroy(athlete2);
+            StartMatch(0);
+            matchTimer = 0;
+        }
     }
 
     public string GeneratePlayerID()
@@ -23,7 +41,9 @@ public class matchControl : MonoBehaviour {
         float baseMass = Random.value * 2.5f;
         float abilityPower = Random.value + 0.5f;
         float abilityCooldown = (Random.value * 3) + 1;
-        string id = baseSpeed + " " + abilityType + " " + baseMass + " " + abilityPower + " " + abilityCooldown;
+        Color mainColor = new Color(Random.value, Random.value, Random.value, 1.0f);
+        Color frontColor = new Color((1 - mainColor.r) + ((Random.value * 0.1f) - 0.2f), (1 - mainColor.g) + ((Random.value * 0.1f) - 0.2f), (1 - mainColor.b) + ((Random.value * 0.1f) - 0.2f), 1.0f);
+        string id = baseSpeed + " " + abilityType + " " + baseMass + " " + abilityPower + " " + abilityCooldown + " " + mainColor.r + " " + mainColor.g + " " + mainColor.b + " " + frontColor.r + " " + frontColor.g + " " + frontColor.b;
         return id;
     }
 
@@ -37,6 +57,8 @@ public class matchControl : MonoBehaviour {
         champ.GetComponent<AthleteMovement>().baseMass = float.Parse(splitID[2]);
         champ.GetComponent<AthleteMovement>().abilityPower = float.Parse(splitID[3]);
         champ.GetComponent<AthleteMovement>().abilityCooldown = float.Parse(splitID[4]);
+        champ.GetComponent<SpriteRenderer>().color = new Color(float.Parse(splitID[5]), float.Parse(splitID[6]), float.Parse(splitID[7]), 1.0f);
+        champ.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(float.Parse(splitID[8]), float.Parse(splitID[9]), float.Parse(splitID[10]), 1.0f);
         champ.GetComponent<Rigidbody2D>().mass = champ.GetComponent<AthleteMovement>().baseMass;
         champ.GetComponent<AthleteMovement>().goal = GameObject.Find("Goal");
         champ.name = "Athlete: Ability: " + champ.GetComponent<AthleteMovement>().abilityType;
@@ -46,9 +68,13 @@ public class matchControl : MonoBehaviour {
     public void StartMatch(int type)
     {
         string athleteID1 = athleteIDs[(int)Mathf.Floor(Random.value * athleteAmount)];
-        string athleteID2 = athleteIDs[(int)Mathf.Floor(Random.value * athleteAmount)];
-        GameObject athlete1 = InitialiseAthleteFromID(athleteID1, new Vector3(2.2f, 2.5f, 0));
-        GameObject athlete2 = InitialiseAthleteFromID(athleteID2, new Vector3(0, -2.8f, 0));
+        string athleteID2;
+        do
+        {
+            athleteID2 = athleteIDs[(int)Mathf.Floor(Random.value * athleteAmount)];
+        } while (athleteID2 == athleteID1);
+        athlete1 = InitialiseAthleteFromID(athleteID1, new Vector3(2.2f, 2.5f, 0));
+        athlete2 = InitialiseAthleteFromID(athleteID2, new Vector3(0, -2.8f, 0));
         athlete1.GetComponent<AthleteMovement>().opponent = athlete2;
         athlete2.GetComponent<AthleteMovement>().opponent = athlete1;
         athlete1.GetComponent<AthleteMovement>().goal = GameObject.Find("Goal");
