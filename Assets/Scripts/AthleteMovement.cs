@@ -31,7 +31,7 @@ public class AthleteMovement : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
         GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value, 1.0f);
         transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color((1-GetComponent<SpriteRenderer>().color.r) + ((Random.value * 0.1f) - 0.2f), (1-GetComponent<SpriteRenderer>().color.g) + ((Random.value * 0.1f) - 0.2f), (1-GetComponent<SpriteRenderer>().color.b)+((Random.value*0.1f)-0.2f), 1.0f);
-       
+        rbody.mass = baseMass;
         /*    Finding Complementory Colours: 
         if colour = { "RR", "GG", "BB"}
         then colour.complement = { FF - "RR", FF - "GG", FF - "BB"}
@@ -72,7 +72,7 @@ public class AthleteMovement : MonoBehaviour
         {
             usedTimer++;
             rbody.velocity = Vector3.zero;
-            if (usedTimer > abilityPower * 30)
+            if (usedTimer > abilityPower * 20)
             {
                 usedTimer = 0;
                 anchored = false;
