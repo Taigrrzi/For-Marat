@@ -18,21 +18,24 @@ public class matchControl : MonoBehaviour {
                 GameObject champ = (GameObject)Instantiate(Resources.Load("Athlete"));
                 champ.transform.position = new Vector3(2.2f, 2.5f, 0);
                 champ.GetComponent<AthleteMovement>().baseSpeed = (Random.value * 10) + 5;
-                champ.GetComponent<AthleteMovement>().abilityType = (int) Mathf.Floor(Random.value*3f);
+                champ.GetComponent<AthleteMovement>().abilityType = (int) Mathf.Floor(Random.value*5f);
                 champ.GetComponent<AthleteMovement>().baseMass = Random.value * 2.5f;
-                champ.GetComponent<AthleteMovement>().abilityPower = Random.value;
+                champ.GetComponent<AthleteMovement>().abilityPower = Random.value+0.5f;
                 champ.GetComponent<Rigidbody2D>().mass = champ.GetComponent<AthleteMovement>().baseMass;
-                champ.GetComponent<AthleteMovement>().abilityCooldown = Random.value * 5;
+                champ.GetComponent<AthleteMovement>().abilityCooldown = (Random.value * 3)+1;
                 champ.GetComponent<AthleteMovement>().goal = GameObject.Find("Goal");
+                champ.name = "Athlete:" + champ.GetComponent<AthleteMovement>().abilityType;
 
                 GameObject champ2 = (GameObject)Instantiate(Resources.Load("Athlete"));
                 champ2.transform.position = new Vector3(0, -2.8f, 0);
                 champ2.GetComponent<AthleteMovement>().baseSpeed = (Random.value * 10) + 5;
-                champ2.GetComponent<AthleteMovement>().abilityType = (int)Mathf.Floor(Random.value * 3f);
+                champ2.GetComponent<AthleteMovement>().abilityType = (int)Mathf.Floor(Random.value * 5f);
                 champ2.GetComponent<AthleteMovement>().baseMass = Random.value * 2.5f;
+                champ2.GetComponent<AthleteMovement>().abilityPower = Random.value + 0.5f;
                 champ2.GetComponent<Rigidbody2D>().mass = champ2.GetComponent<AthleteMovement>().baseMass;
-                champ2.GetComponent<AthleteMovement>().abilityCooldown = Random.value * 5;
+                champ2.GetComponent<AthleteMovement>().abilityCooldown = (Random.value * 3) + 1;
                 champ2.GetComponent<AthleteMovement>().goal = GameObject.Find("Goal");
+                champ2.name = "Athlete: " + champ2.GetComponent<AthleteMovement>().abilityType;
 
                 champ2.GetComponent<AthleteMovement>().opponent = champ;
                 champ.GetComponent<AthleteMovement>().opponent = champ2;

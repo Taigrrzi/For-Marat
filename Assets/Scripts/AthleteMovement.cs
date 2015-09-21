@@ -13,9 +13,11 @@ public class AthleteMovement : MonoBehaviour
     public GameObject opponent;
     public float baseHealth;
     public float abilityPower;
+    public bool anchored;
     public float currentHealth;
     public float baseMass;
     float abilityTimer;
+    float usedTimer;
     Vector2 direc;
     Rigidbody2D rbody;
 
@@ -25,6 +27,7 @@ public class AthleteMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        usedTimer = 0;
         rbody = GetComponent<Rigidbody2D>();
         GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value, 1.0f);
         transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color((1-GetComponent<SpriteRenderer>().color.r) + ((Random.value * 0.1f) - 0.2f), (1-GetComponent<SpriteRenderer>().color.g) + ((Random.value * 0.1f) - 0.2f), (1-GetComponent<SpriteRenderer>().color.b)+((Random.value*0.1f)-0.2f), 1.0f);
@@ -65,6 +68,15 @@ public class AthleteMovement : MonoBehaviour
         } else if (currentSpeed > baseSpeed)
         {
             currentSpeed = baseSpeed + ((currentSpeed-baseSpeed) * (abilityTimer / abilityCooldown));
+        } else if (anchored)
+        {
+            usedTimer++;
+            rbody.velocity = Vector3.zero;
+            if (usedTimer > abilityPower * 30)
+            {
+                usedTimer = 0;
+                anchored = false;
+            }
         }
 
 
@@ -87,13 +99,26 @@ public class AthleteMovement : MonoBehaviour
         switch (abilityType)
         {
             case 0:
-                rbody.mass *= (abilityPower * 1.5f) + 1f;
+                rbody.mass *= (abilityPower*4) + 0.5f;
                 break;
             case 1:
-                currentSpeed *= (abilityPower * 1.5f) + 1f;
+                currentSpeed *= (abilityPower*4) + 0.5f;
                 break;
             case 2:
-                rbody.AddForce(rbody.mass * direc * currentSpeed * abilityPower * 100);
+                rbody.AddForce(rbody.mass * direc * currentSpeed * abilityPower * 50);
+                break;
+            case 3:
+                anchored = true;
+                break;
+            case 4:
+                //do
+                //{
+                    transform.position = new Vector3((Random.value * 2f) - 2f, (Random.value * 2f) - 2f, 0f);
+               // } while (Vector3.Distance(transform.position, Vector3.zero) > 4);
+               // Debug.Log(Vector3.Distance(transform.position, Vector3.zero));
+                direc = oppodirec;
+                rbody.velocity = Vector3.zero;
+                rbody.AddForce(rbody.mass * direc * currentSpeed*2);
                 break;
             default:
                 break;
