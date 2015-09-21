@@ -10,13 +10,51 @@ public class matchControl : MonoBehaviour {
     public int matchDuration;
     public GameObject athlete1;
     public GameObject athlete2;
+    public string[] nameStarts;
+    public string[] nameMiddles;
+    public string[] nameEnds;
     // Use this for initialization
     void Start () {
+        nameStarts = new string[13];
+        nameStarts[0] = "Blarg" ;
+        nameStarts[1] = "Pin";
+        nameStarts[2] = "Pom";
+        nameStarts[3] = "Dan";
+        nameStarts[4] = "Tin";
+        nameStarts[5] = "Vor";
+        nameStarts[6] = "Mag";
+        nameStarts[7] = "Mup";
+        nameStarts[8] = "Ner";
+        nameStarts[9] = "Quin";
+        nameStarts[10] = "Dan";
+        nameStarts[11] = "Mil";
+        nameStarts[12] = "Dor";
+        nameMiddles = new string[6];
+        nameMiddles[0] = "na";
+        nameMiddles[1] = "on";
+        nameMiddles[2] = "a";
+        nameMiddles[3] = "o";
+        nameMiddles[4] = "u";
+        nameMiddles[5] = "ax";
+        nameEnds = new string[13];
+        nameEnds[0] = "ton";
+        nameEnds[1] = "man";
+        nameEnds[2] = "paz";
+        nameEnds[3] = "don";
+        nameEnds[4] = "er";
+        nameEnds[5] = "ter";
+        nameEnds[6] = "ing";
+        nameEnds[7] = "ant";
+        nameEnds[8] = "elor";
+        nameEnds[9] = "chil";
+        nameEnds[10] = "dred";
+        nameEnds[11] = "nia";
+        nameEnds[12] = "an";
         matchTimer = 0;
         athleteIDs = new string[athleteAmount];
         for (int i=0;i<athleteAmount;i++)
         {
-            athleteIDs[i] = GeneratePlayerID();
+            athleteIDs[i] = GenerateAthleteID();
         }
         StartMatch(matchType);
     }
@@ -34,16 +72,32 @@ public class matchControl : MonoBehaviour {
         }
     }
 
-    public string GeneratePlayerID()
+    public string GenerateAthleteName()
+    {
+        switch ((int)Mathf.Round(Random.value*2))
+        {
+            case 0:
+                return nameStarts[(int)Mathf.Floor(Random.value * nameStarts.Length)] + nameMiddles[(int)Mathf.Floor(Random.value * nameMiddles.Length)] + nameEnds[(int)Mathf.Floor(Random.value * nameEnds.Length)];
+            case 1:
+                return nameStarts[(int)Mathf.Floor(Random.value * nameStarts.Length)] + nameEnds[(int)Mathf.Floor(Random.value * nameEnds.Length)];
+            case 2:
+                return nameStarts[(int)Mathf.Floor(Random.value * nameStarts.Length)] + "-" + GenerateAthleteName();
+            default:
+                return "ERROR";
+        }
+    }
+
+    public string GenerateAthleteID()
     {
         float baseSpeed = (Random.value * 10) + 5;
         int abilityType = (int)Mathf.Floor(Random.value * 5f);
         float baseMass = Random.value * 2.5f;
         float abilityPower = Random.value + 0.5f;
+        string name = GenerateAthleteName();
         float abilityCooldown = (Random.value * 3) + 1;
         Color mainColor = new Color(Random.value, Random.value, Random.value, 1.0f);
         Color frontColor = new Color((1 - mainColor.r) + ((Random.value * 0.1f) - 0.2f), (1 - mainColor.g) + ((Random.value * 0.1f) - 0.2f), (1 - mainColor.b) + ((Random.value * 0.1f) - 0.2f), 1.0f);
-        string id = baseSpeed + " " + abilityType + " " + baseMass + " " + abilityPower + " " + abilityCooldown + " " + mainColor.r + " " + mainColor.g + " " + mainColor.b + " " + frontColor.r + " " + frontColor.g + " " + frontColor.b;
+        string id = baseSpeed + " " + abilityType + " " + baseMass + " " + abilityPower + " " + abilityCooldown + " " + mainColor.r + " " + mainColor.g + " " + mainColor.b + " " + frontColor.r + " " + frontColor.g + " " + frontColor.b + " " + name;
         return id;
     }
 
@@ -61,7 +115,8 @@ public class matchControl : MonoBehaviour {
         champ.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(float.Parse(splitID[8]), float.Parse(splitID[9]), float.Parse(splitID[10]), 1.0f);
         champ.GetComponent<Rigidbody2D>().mass = champ.GetComponent<AthleteMovement>().baseMass;
         champ.GetComponent<AthleteMovement>().goal = GameObject.Find("Goal");
-        champ.name = "Athlete: Ability: " + champ.GetComponent<AthleteMovement>().abilityType;
+        champ.GetComponent<AthleteMovement>().name = splitID[11].Replace("-", " ");
+        champ.name = splitID[11].Replace("-"," ") + "  Ability: " + champ.GetComponent<AthleteMovement>().abilityType;
         return champ ;
     }
 
