@@ -99,7 +99,7 @@ public class AthleteMovement : MonoBehaviour
         switch (abilityType)
         {
             case 0:
-                rbody.mass *= (abilityPower*4) + 0.5f;
+                rbody.mass *= (abilityPower*10) + 0.5f;
                 break;
             case 1:
                 currentSpeed *= (abilityPower*4) + 0.5f;
@@ -111,11 +111,10 @@ public class AthleteMovement : MonoBehaviour
                 anchored = true;
                 break;
             case 4:
-                //do
-                //{
+                if (Vector3.Distance(transform.position, Vector3.zero) > Vector3.Distance(opponent.transform.position, Vector3.zero))
+                {
                     transform.position = new Vector3((Random.value * 2f) - 2f, (Random.value * 2f) - 2f, 0f);
-               // } while (Vector3.Distance(transform.position, Vector3.zero) > 4);
-               // Debug.Log(Vector3.Distance(transform.position, Vector3.zero));
+                }
                 direc = oppodirec;
                 rbody.velocity = Vector3.zero;
                 rbody.AddForce(rbody.mass * direc * currentSpeed*2);
